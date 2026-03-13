@@ -94,7 +94,7 @@
 </div>
 
 <div class="game-container" id="level3">
-    <h1>第三關：幫幫孟母</h1>
+    <h1>第三關：幫幫慈母</h1>
     <h2>詩句重組</h2>
     <p>請點擊上方的詩句，把它們排成正確的順序！</p>
     
@@ -381,16 +381,25 @@
         const optsDiv = document.createElement('div'); optsDiv.className = 'options-container';
         data.opts.forEach((opt, i) => {
             const btn = document.createElement('button'); btn.className = 'option-btn'; btn.textContent = opt;
+            
+            // 修改後的邏輯：答錯必須重答，直到答對為止
             btn.onclick = () => {
-                const allBtns = optsDiv.querySelectorAll('.option-btn');
-                allBtns.forEach(b => b.onclick = null);
                 if (i === data.ans) {
-                    btn.classList.add('correct'); document.getElementById('msg5').textContent = "超級棒！情境判斷完全正確！"; document.getElementById('msg5').style.color = "#27ae60";
+                    // 答對了：鎖定所有按鈕，顯示正確訊息與下一題按鈕
+                    const allBtns = optsDiv.querySelectorAll('.option-btn');
+                    allBtns.forEach(b => b.onclick = null);
+                    
+                    btn.classList.remove('wrong');
+                    btn.classList.add('correct'); 
+                    document.getElementById('msg5').textContent = "超級棒！情境判斷完全正確！"; 
+                    document.getElementById('msg5').style.color = "#27ae60";
+                    document.getElementById('nextChallengeBtn').style.display = 'inline-block';
                 } else {
-                    btn.classList.add('wrong'); allBtns[data.ans].classList.add('correct');
-                    document.getElementById('msg5').textContent = "再思考一下喔！正確答案是綠色的。"; document.getElementById('msg5').style.color = "#c0392b";
+                    // 答錯了：按鈕變紅，提示重答，不鎖定其他按鈕，也不顯示下一題
+                    btn.classList.add('wrong'); 
+                    document.getElementById('msg5').textContent = "不太對喔！請再思考一下，選擇其他答案看看。"; 
+                    document.getElementById('msg5').style.color = "#c0392b";
                 }
-                document.getElementById('nextChallengeBtn').style.display = 'inline-block';
             };
             optsDiv.appendChild(btn);
         });
