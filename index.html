@@ -17,6 +17,7 @@
             flex-direction: column;
             align-items: center;
         }
+        /* 關卡容器：預設第2,3,4,5關隱藏 */
         .game-container {
             background-color: rgba(255, 255, 255, 0.95);
             padding: 30px;
@@ -27,6 +28,8 @@
             width: 100%;
             margin-bottom: 40px;
         }
+        #level2, #level3, #level4, #level5 { display: none; } /* 隱藏未解鎖關卡 */
+        
         h1 { color: #d35400; margin-bottom: 5px; font-size: 28px; }
         h2 { color: #2980b9; margin-top: 0; border-bottom: 2px dashed #bdc3c7; padding-bottom: 10px; font-size: 22px; }
         p { font-size: 18px; color: #555; }
@@ -34,38 +37,39 @@
         /* 通用按鈕與訊息 */
         .action-btn { background-color: #2980b9; color: white; border: none; padding: 12px 25px; font-size: 20px; border-radius: 10px; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 0 #1f618d; transition: 0.1s;}
         .action-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #1f618d; }
+        .challenge-btn { background-color: #8e44ad; box-shadow: 0 4px 0 #732d91; } /* 挑戰關卡特別按鈕顏色 */
+        .challenge-btn:hover { background-color: #9b59b6; }
+        
         .message { margin-top: 15px; font-size: 22px; font-weight: bold; min-height: 30px; }
         #success-img { display: none; max-width: 250px; margin: 20px auto 0; animation: pop 0.5s ease-out; }
         @keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* 第一關 & 第四關 共用：選擇題風格 */
+        /* 選擇題風格 */
         .options-container { display: flex; flex-direction: column; gap: 15px; align-items: center; }
         .option-btn { background-color: #ecf0f1; color: #2c3e50; border: 2px solid #bdc3c7; padding: 15px 20px; font-size: 20px; border-radius: 10px; cursor: pointer; width: 90%; text-align: left; transition: 0.2s; }
         .option-btn:hover { background-color: #d4e6f1; border-color: #3498db; }
         .option-btn.correct { background-color: #27ae60; color: white; border-color: #2ecc71; }
         .option-btn.wrong { background-color: #e74c3c; color: white; border-color: #c0392b; }
         
-        /* 第一關：圖文配對專用 */
+        /* 圖文配對 */
         .match-img { max-height: 250px; max-width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
 
-        /* 第二關 & 第三關 共用：字詞庫 */
+        /* 字詞庫與填充 */
         .word-bank { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; min-height: 50px; }
         .piece { background-color: #f39c12; color: white; padding: 10px 20px; border-radius: 10px; font-size: 22px; cursor: pointer; user-select: none; box-shadow: 0 4px 0 #e67e22; transition: 0.1s; }
         .piece:active { transform: translateY(4px); box-shadow: 0 0 0 #e67e22; }
-
-        /* 第二關：填充題專用 */
+        
         .fill-sentence { font-size: 28px; font-weight: bold; color: #2c3e50; margin: 20px 0; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 5px; }
         .fill-slot { width: 45px; height: 45px; border: 3px dashed #bdc3c7; border-radius: 8px; display: inline-flex; justify-content: center; align-items: center; cursor: pointer; background-color: #f9f9f9; color: #c0392b; }
         .fill-slot.filled { border: 3px solid #2980b9; background-color: #ebf5fb; }
 
-        /* 第三關：重組專用 */
+        /* 重組區 */
         .answer-area { display: flex; flex-direction: column; gap: 10px; align-items: center; margin-bottom: 20px; }
         .slot-long { width: 80%; height: 50px; border: 3px dashed #bdc3c7; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 22px; cursor: pointer; background-color: #f9f9f9; }
         .slot-long.filled { border: 3px solid #27ae60; background-color: #eafaf1; }
 
-        /* 第四關：裝飾圖 */
         .activity-img { max-width: 150px; height: auto; margin: 10px 0; }
-        .quiz-question { font-size: 22px; font-weight: bold; color: #2c3e50; margin: 20px 0; }
+        .quiz-question { font-size: 22px; font-weight: bold; color: #2c3e50; margin: 20px 0; line-height: 1.5;}
     </style>
 </head>
 <body>
@@ -109,21 +113,31 @@
 
 <div class="game-container" id="level4">
     <h1>第四關：詩意大考驗</h1>
-    <h2>意譯選擇題</h2>
+    <h2>意譯與深層理解</h2>
     <img src="activity.png" alt="活動圖片" class="activity-img" onerror="this.style.display='none'">
     
     <div id="quiz-container"></div>
     <div class="message" id="msg4"></div>
     <button class="action-btn" id="nextQuizBtn" style="display:none;" onclick="nextQuiz()">下一題</button>
     
-    <div id="final-reward" style="display:none; text-align:center; margin-top:20px;">
-        <h2 style="color:#27ae60; font-size:28px;">恭喜你！完成所有挑戰！</h2>
+    <div id="final-reward" style="display:none; text-align:center; margin-top:30px; border-top: 2px solid #eee; padding-top: 20px;">
+        <h2 style="color:#27ae60; font-size:28px; border:none;">恭喜你！完成所有基本挑戰！💯</h2>
         <img src="success.png" id="success-img" alt="恭喜過關">
+        <p style="margin-top:20px; font-weight:bold;">你已經完全掌握這首詩了！想挑戰一下自己的極限嗎？</p>
+        <button class="action-btn challenge-btn" onclick="unlockLevel5()">⭐ 接受隱藏挑戰 ⭐</button>
     </div>
 </div>
 
+<div class="game-container" id="level5">
+    <h1>⭐ 隱藏關卡：小詩人挑戰 ⭐</h1>
+    <h2>情境應用題</h2>
+    <p>學以致用！請判斷以下日常生活的情境，最符合哪一句詩的道理？</p>
+    <div id="challenge-container"></div>
+    <div class="message" id="msg5"></div>
+    <button class="action-btn challenge-btn" id="nextChallengeBtn" style="display:none;" onclick="nextChallenge()">下一題</button>
+</div>
+
 <script>
-    /* 通用打亂陣列函數 */
     function shuffle(array) {
         let arr = [...array];
         for (let i = arr.length - 1; i > 0; i--) {
@@ -133,10 +147,11 @@
         return arr;
     }
 
-    /* ================= 第一關邏輯 (圖文配對) ================= */
+    /* ================= 1. 圖文配對 ================= */
     const matchData = [
         { img: "match1.png", opts: ["慈母手中線", "意恐遲遲歸", "誰言寸草心"], ans: 0 },
-        { img: "match2.png", opts: ["遊子身上衣", "報得三春暉", "臨行密密縫"], ans: 1 }
+        { img: "match3.png", opts: ["臨行密密縫", "意恐遲遲歸", "報得三春暉"], ans: 1 }, // 新增的背影圖
+        { img: "match2.png", opts: ["遊子身上衣", "臨行密密縫", "報得三春暉"], ans: 2 }
     ];
     let mIdx = 0;
 
@@ -144,10 +159,13 @@
         const container = document.getElementById('match-container');
         container.innerHTML = '';
         if (mIdx >= matchData.length) { 
-            container.innerHTML = '<h3 style="color:#27ae60;">第一關完成！請向下捲動挑戰第二關 ⬇️</h3>'; 
+            container.innerHTML = '<h3 style="color:#27ae60;">第一關解鎖完成！⬇️</h3>'; 
+            // 解鎖第二關並滑動
+            const level2 = document.getElementById('level2');
+            level2.style.display = 'block';
+            level2.scrollIntoView({ behavior: 'smooth' });
             return; 
         }
-        
         const data = matchData[mIdx];
         container.innerHTML = `<img src="${data.img}" class="match-img" alt="配對圖片" onerror="this.outerHTML='<div style=\\'padding:40px; background:#eee; border-radius:10px; margin-bottom:15px;\\'>[請在此放入 ${data.img}]</div>'">`;
         
@@ -161,7 +179,7 @@
                     btn.classList.add('correct'); document.getElementById('msg1').textContent = "配對成功！"; document.getElementById('msg1').style.color = "#27ae60";
                 } else {
                     btn.classList.add('wrong'); allBtns[data.ans].classList.add('correct');
-                    document.getElementById('msg1').textContent = "不太對喔，再仔細看看！"; document.getElementById('msg1').style.color = "#c0392b";
+                    document.getElementById('msg1').textContent = "不太對喔，再仔細看看圖片！"; document.getElementById('msg1').style.color = "#c0392b";
                 }
                 document.getElementById('nextMatchBtn').style.display = 'inline-block';
             };
@@ -172,10 +190,12 @@
     function nextMatch() { mIdx++; document.getElementById('msg1').textContent = ''; document.getElementById('nextMatchBtn').style.display = 'none'; renderMatch(); }
     renderMatch();
 
-    /* ================= 第二關邏輯 (火眼金睛填充) ================= */
+    /* ================= 2. 火眼金睛 ================= */
+    // 增加了一題「誰言寸草心」
     const fillData = [
         { parts: ["臨行", "縫"], ans: ["密", "密"], bank: ["密", "遲", "寸", "心", "密", "春"] },
-        { parts: ["意恐", "歸"], ans: ["遲", "遲"], bank: ["密", "遲", "歸", "遲", "草", "暉"] }
+        { parts: ["意恐", "歸"], ans: ["遲", "遲"], bank: ["密", "遲", "歸", "遲", "草", "暉"] },
+        { parts: ["誰言", "心"], ans: ["寸", "草"], bank: ["大", "草", "寸", "春", "衣", "線"] } 
     ];
     let fIdx = 0;
     let currentFillAnswers = [];
@@ -188,40 +208,38 @@
         document.getElementById('nextFillBtn').style.display = 'none';
 
         if (fIdx >= fillData.length) { 
-            container.innerHTML = '<h3 style="color:#27ae60;">第二關完成！請向下捲動挑戰第三關 ⬇️</h3>'; 
+            container.innerHTML = '<h3 style="color:#27ae60;">第二關解鎖完成！⬇️</h3>'; 
             document.getElementById('checkFillBtn').style.display = 'none';
+            // 解鎖第三關並滑動
+            const level3 = document.getElementById('level3');
+            level3.style.display = 'block';
+            level3.scrollIntoView({ behavior: 'smooth' });
             return; 
         }
 
         const data = fillData[fIdx];
         currentFillAnswers = new Array(data.ans.length).fill(null);
-
-        const sentenceDiv = document.createElement('div');
-        sentenceDiv.className = 'fill-sentence';
+        const sentenceDiv = document.createElement('div'); sentenceDiv.className = 'fill-sentence';
         
         data.parts.forEach((part, index) => {
             const textSpan = document.createElement('span'); textSpan.textContent = part;
             sentenceDiv.appendChild(textSpan);
             if (index < data.parts.length - 1) {
                 for(let i=0; i<data.ans.length; i++){
-                    const slot = document.createElement('div');
-                    slot.className = 'fill-slot';
-                    slot.dataset.idx = i;
+                    const slot = document.createElement('div'); slot.className = 'fill-slot'; slot.dataset.idx = i;
                     sentenceDiv.appendChild(slot);
                 }
             }
         });
         container.appendChild(sentenceDiv);
 
-        const bankDiv = document.createElement('div');
-        bankDiv.className = 'word-bank';
+        const bankDiv = document.createElement('div'); bankDiv.className = 'word-bank';
         shuffle(data.bank).forEach(char => createFillChar(char, bankDiv));
         container.appendChild(bankDiv);
     }
 
     function createFillChar(char, bankDiv) {
-        const p = document.createElement('div');
-        p.className = 'piece'; p.textContent = char;
+        const p = document.createElement('div'); p.className = 'piece'; p.textContent = char;
         p.onclick = () => {
             const emptyIdx = currentFillAnswers.findIndex(ans => ans === null);
             if (emptyIdx !== -1) {
@@ -240,15 +258,11 @@
     }
 
     function checkFill() {
-        const data = fillData[fIdx];
-        const msg = document.getElementById('msg2');
+        const data = fillData[fIdx]; const msg = document.getElementById('msg2');
         if (currentFillAnswers.includes(null)) { msg.textContent = "請把空格填滿喔！"; msg.style.color = "#e67e22"; return; }
-        
-        let isCorrect = currentFillAnswers.every((val, i) => val === data.ans[i]);
-        if (isCorrect) {
+        if (currentFillAnswers.every((val, i) => val === data.ans[i])) {
             msg.textContent = "完全正確！火眼金睛！"; msg.style.color = "#27ae60";
-            document.getElementById('checkFillBtn').style.display = 'none';
-            document.getElementById('nextFillBtn').style.display = 'inline-block';
+            document.getElementById('checkFillBtn').style.display = 'none'; document.getElementById('nextFillBtn').style.display = 'inline-block';
             document.querySelectorAll('.fill-slot').forEach(s => s.onclick = null);
         } else {
             msg.textContent = "好像有錯字喔，點擊紅字退回再試試！"; msg.style.color = "#c0392b";
@@ -257,7 +271,7 @@
     function nextFill() { fIdx++; renderFill(); }
     renderFill();
 
-    /* ================= 第三關邏輯 (重組) ================= */
+    /* ================= 3. 詩句重組 ================= */
     const orderData = ["慈母手中線", "遊子身上衣", "臨行密密縫", "意恐遲遲歸", "誰言寸草心", "報得三春暉"];
     let answers3 = new Array(6).fill(null);
     const slots3 = document.querySelectorAll('#level3 .slot-long');
@@ -266,19 +280,13 @@
     shuffle(orderData).forEach(word => createPiece3(word));
 
     function createPiece3(word) {
-        const p = document.createElement('div');
-        p.className = 'piece'; p.textContent = word;
+        const p = document.createElement('div'); p.className = 'piece'; p.textContent = word;
         p.onclick = () => {
             const emptyIdx = answers3.findIndex(ans => ans === null);
             if (emptyIdx !== -1) {
-                answers3[emptyIdx] = word;
-                slots3[emptyIdx].textContent = word;
-                slots3[emptyIdx].classList.add('filled');
+                answers3[emptyIdx] = word; slots3[emptyIdx].textContent = word; slots3[emptyIdx].classList.add('filled');
                 slots3[emptyIdx].onclick = () => {
-                    answers3[emptyIdx] = null;
-                    slots3[emptyIdx].textContent = '';
-                    slots3[emptyIdx].classList.remove('filled');
-                    slots3[emptyIdx].onclick = null;
+                    answers3[emptyIdx] = null; slots3[emptyIdx].textContent = ''; slots3[emptyIdx].classList.remove('filled'); slots3[emptyIdx].onclick = null;
                     createPiece3(word);
                 };
                 p.remove();
@@ -291,17 +299,23 @@
         const msg = document.getElementById('msg3');
         if (answers3.includes(null)) { msg.textContent = "請填滿所有空格！"; msg.style.color = "#e67e22"; return; }
         if (answers3.every((val, i) => val === orderData[i])) {
-            msg.textContent = "太棒了！請向下捲動挑戰最後一關 ⬇️"; msg.style.color = "#27ae60";
+            msg.textContent = "順序完全正確！"; msg.style.color = "#27ae60";
             document.getElementById('btn3').style.display = 'none';
+            // 解鎖第四關並滑動
+            const level4 = document.getElementById('level4');
+            level4.style.display = 'block';
+            level4.scrollIntoView({ behavior: 'smooth' });
         } else {
             msg.textContent = "順序不對喔，點擊錯誤詩句退回再試！"; msg.style.color = "#c0392b";
         }
     }
 
-    /* ================= 第四關邏輯 (選擇題) ================= */
+    /* ================= 4. 詩意大考驗 (擴展題目) ================= */
     const quizData = [
-        { q: "「臨行密密縫」是什麼意思？", opts: ["A. 離開前匆匆忙忙縫衣服", "B. 臨走前，母親一針一線細密地縫補", "C. 衣服破了密密麻麻的洞"], ans: 1 },
-        { q: "「意恐遲遲歸」中，母親擔心什麼？", opts: ["A. 擔心兒子太晚起床", "B. 擔心兒子忘記帶衣服", "C. 擔心兒子很晚才回家"], ans: 2 }
+        { q: "「臨行密密縫」是什麼意思？", opts: ["A. 離開前匆匆忙忙縫衣服", "B. 臨走前，母親一針一線細密地縫補衣服", "C. 衣服破了密密麻麻的洞"], ans: 1 },
+        { q: "詩中「寸草」指的是誰？", opts: ["A. 路邊的小草", "B. 母親", "C. 兒女 (微小的孝心)"], ans: 2 },
+        { q: "為什麼詩人要用「三春暉」(春天的陽光) 來比喻母愛？", opts: ["A. 因為春天很溫暖，就像母親的愛一樣無私偉大", "B. 因為孟郊喜歡春天", "C. 因為春天適合出門旅行"], ans: 0 },
+        { q: "這首詩主要想表達什麼主題？", opts: ["A. 讚美衣服縫得很堅固漂亮", "B. 描寫遊子出門旅行的快樂心情", "C. 歌頌母愛的偉大，並感嘆兒女難以報答"], ans: 2 }
     ];
     let qIdx = 0;
 
@@ -310,15 +324,14 @@
         container.innerHTML = '';
         
         if (qIdx >= quizData.length) { 
+            // 顯示最終過關畫面及解鎖挑戰按鈕
             document.getElementById('final-reward').style.display = 'block'; 
             document.getElementById('success-img').style.display = 'inline';
             return; 
         }
         
         const data = quizData[qIdx];
-        const qDiv = document.createElement('div');
-        qDiv.className = 'quiz-question';
-        qDiv.textContent = `${qIdx+1}. ${data.q}`;
+        const qDiv = document.createElement('div'); qDiv.className = 'quiz-question'; qDiv.textContent = `${qIdx+1}. ${data.q}`;
         container.appendChild(qDiv);
 
         const optsDiv = document.createElement('div'); optsDiv.className = 'options-container';
@@ -328,10 +341,10 @@
                 const allBtns = optsDiv.querySelectorAll('.option-btn');
                 allBtns.forEach(b => b.onclick = null);
                 if (i === data.ans) {
-                    btn.classList.add('correct'); document.getElementById('msg4').textContent = "答對了！"; document.getElementById('msg4').style.color = "#27ae60";
+                    btn.classList.add('correct'); document.getElementById('msg4').textContent = "答對了！分析得很好！"; document.getElementById('msg4').style.color = "#27ae60";
                 } else {
                     btn.classList.add('wrong'); allBtns[data.ans].classList.add('correct');
-                    document.getElementById('msg4').textContent = "答錯了，正確答案是綠色的選項。"; document.getElementById('msg4').style.color = "#c0392b";
+                    document.getElementById('msg4').textContent = "答錯了，請看綠色的正確答案並記下來喔！"; document.getElementById('msg4').style.color = "#c0392b";
                 }
                 document.getElementById('nextQuizBtn').style.display = 'inline-block';
             };
@@ -339,9 +352,57 @@
         });
         container.appendChild(optsDiv);
     }
-    
     function nextQuiz() { qIdx++; document.getElementById('msg4').textContent = ''; document.getElementById('nextQuizBtn').style.display = 'none'; renderQuiz(); }
     renderQuiz();
+
+    /* ================= 5. 隱藏挑戰：情境應用 ================= */
+    function unlockLevel5() {
+        const level5 = document.getElementById('level5');
+        level5.style.display = 'block';
+        level5.scrollIntoView({ behavior: 'smooth' });
+        // 隱藏那個解鎖按鈕，避免重複按
+        document.querySelector('.challenge-btn').style.display = 'none';
+        renderChallenge();
+    }
+
+    const challengeData = [
+        { q: "今天是母親節，小明用自己的零用錢買了一朵康乃馨送給媽媽，並對媽媽說：「媽媽辛苦了！」小明的行為最能體現哪一句詩的精神？", opts: ["A. 慈母手中線", "B. 意恐遲遲歸", "C. 報得三春暉"], ans: 2 },
+        { q: "陳阿姨的女兒要去外國讀書了，陳阿姨在機場不斷叮嚀女兒要注意保暖、按時吃飯。這份心情最符合哪一句詩？", opts: ["A. 意恐遲遲歸", "B. 遊子身上衣", "C. 誰言寸草心"], ans: 0 }
+    ];
+    let cIdx = 0;
+
+    function renderChallenge() {
+        const container = document.getElementById('challenge-container');
+        container.innerHTML = '';
+        
+        if (cIdx >= challengeData.length) { 
+            container.innerHTML = '<h2 style="color:#8e44ad;">太厲害了！你不僅會背詩，還懂得將古人的智慧應用在生活中！你是一位真正的小詩人！🎉</h2>'; 
+            return; 
+        }
+        
+        const data = challengeData[cIdx];
+        const qDiv = document.createElement('div'); qDiv.className = 'quiz-question'; qDiv.textContent = `挑戰 ${cIdx+1}：${data.q}`;
+        container.appendChild(qDiv);
+
+        const optsDiv = document.createElement('div'); optsDiv.className = 'options-container';
+        data.opts.forEach((opt, i) => {
+            const btn = document.createElement('button'); btn.className = 'option-btn'; btn.textContent = opt;
+            btn.onclick = () => {
+                const allBtns = optsDiv.querySelectorAll('.option-btn');
+                allBtns.forEach(b => b.onclick = null);
+                if (i === data.ans) {
+                    btn.classList.add('correct'); document.getElementById('msg5').textContent = "超級棒！情境判斷完全正確！"; document.getElementById('msg5').style.color = "#27ae60";
+                } else {
+                    btn.classList.add('wrong'); allBtns[data.ans].classList.add('correct');
+                    document.getElementById('msg5').textContent = "再思考一下喔！正確答案是綠色的。"; document.getElementById('msg5').style.color = "#c0392b";
+                }
+                document.getElementById('nextChallengeBtn').style.display = 'inline-block';
+            };
+            optsDiv.appendChild(btn);
+        });
+        container.appendChild(optsDiv);
+    }
+    function nextChallenge() { cIdx++; document.getElementById('msg5').textContent = ''; document.getElementById('nextChallengeBtn').style.display = 'none'; renderChallenge(); }
 
 </script>
 </body>
