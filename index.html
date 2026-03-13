@@ -10,7 +10,6 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            /* 加入楷體與香港標準字形，確保「慈」等字顯示為教育正字 */
             font-family: "DFKai-SB", "BiauKai", "MingLiU_HKSCS", "PingFang HK", "Microsoft JhengHei", sans-serif;
             margin: 0;
             padding: 20px;
@@ -150,9 +149,9 @@
 
     /* ================= 1. 圖文配對 ================= */
     const matchData = [
-        { img: "match1.png", opts: ["慈母手中線，遊子身上衣。", "臨行密密縫，意恐遲遲歸。", "誰言寸草心，報得三春暉。"], ans: 0 },
-        { img: "match3.png", opts: ["慈母手中線，遊子身上衣。", "臨行密密縫，意恐遲遲歸。", "誰言寸草心，報得三春暉。"], ans: 1 },
-        { img: "match2.png", opts: ["慈母手中線，遊子身上衣。", "臨行密密縫，意恐遲遲歸。", "誰言寸草心，報得三春暉。"], ans: 2 }
+        { img: "match1.png", opts: ["慈母手中線，遊子身上衣。", "臨行密密縫，意恐遲遲歸。", "誰言寸草心，報得三春暉。"], ans: 0 },
+        { img: "match3.png", opts: ["慈母手中線，遊子身上衣。", "臨行密密縫，意恐遲遲歸。", "誰言寸草心，報得三春暉。"], ans: 1 },
+        { img: "match2.png", opts: ["慈母手中線，遊子身上衣。", "臨行密密縫，意恐遲遲歸。", "誰言寸草心，報得三春暉。"], ans: 2 }
     ];
     let mIdx = 0;
 
@@ -161,7 +160,6 @@
         container.innerHTML = '';
         if (mIdx >= matchData.length) { 
             container.innerHTML = '<h3 style="color:#27ae60;">第一關解鎖完成！⬇️</h3>'; 
-            // 解鎖第二關並滑動
             const level2 = document.getElementById('level2');
             level2.style.display = 'block';
             level2.scrollIntoView({ behavior: 'smooth' });
@@ -210,7 +208,6 @@
         if (fIdx >= fillData.length) { 
             container.innerHTML = '<h3 style="color:#27ae60;">第二關解鎖完成！⬇️</h3>'; 
             document.getElementById('checkFillBtn').style.display = 'none';
-            // 解鎖第三關並滑動
             const level3 = document.getElementById('level3');
             level3.style.display = 'block';
             level3.scrollIntoView({ behavior: 'smooth' });
@@ -272,7 +269,7 @@
     renderFill();
 
     /* ================= 3. 詩句重組 ================= */
-    const orderData = ["慈母手中線，", "遊子身上衣。", "臨行密密縫，", "意恐遲遲歸。", "誰言寸草心，", "報得三春暉。"];
+    const orderData = ["慈母手中線，", "遊子身上衣。", "臨行密密縫，", "意恐遲遲歸。", "誰言寸草心，", "報得三春暉。"];
     let answers3 = new Array(6).fill(null);
     const slots3 = document.querySelectorAll('#level3 .slot-long');
     const bank3 = document.getElementById('wordBank3');
@@ -301,7 +298,6 @@
         if (answers3.every((val, i) => val === orderData[i])) {
             msg.textContent = "順序完全正確！"; msg.style.color = "#27ae60";
             document.getElementById('btn3').style.display = 'none';
-            // 解鎖第四關並滑動
             const level4 = document.getElementById('level4');
             level4.style.display = 'block';
             level4.scrollIntoView({ behavior: 'smooth' });
@@ -324,7 +320,6 @@
         container.innerHTML = '';
         
         if (qIdx >= quizData.length) { 
-            // 顯示最終過關畫面及解鎖挑戰按鈕
             document.getElementById('final-reward').style.display = 'block'; 
             document.getElementById('success-img').style.display = 'inline';
             return; 
@@ -360,14 +355,13 @@
         const level5 = document.getElementById('level5');
         level5.style.display = 'block';
         level5.scrollIntoView({ behavior: 'smooth' });
-        // 隱藏那個解鎖按鈕，避免重複按
         document.querySelector('.challenge-btn').style.display = 'none';
         renderChallenge();
     }
 
     const challengeData = [
-        { q: "今天是母親節，小明用自己的零用錢買了一朵康乃馨送給媽媽，並對媽媽說：「媽媽辛苦了！」小明的行為最能體現哪一句詩的精神？", opts: ["A. 慈母手中線，遊子身上衣。", "B. 臨行密密縫，意恐遲遲歸。", "C. 誰言寸草心，報得三春暉。"], ans: 2 },
-        { q: "陳阿姨的女兒要去外國讀書了，陳阿姨在機場不斷叮嚀女兒要注意保暖、按時吃飯。這份心情最符合哪一句詩？", opts: ["A. 臨行密密縫，意恐遲遲歸。", "B. 慈母手中線，遊子身上衣。", "C. 誰言寸草心，報得三春暉。"], ans: 0 }
+        { q: "今天是母親節，小明用自己的零用錢買了一朵康乃馨送給媽媽，並對媽媽說：「媽媽辛苦了！」小明的行為最能體現哪一句詩的精神？", opts: ["A. 慈母手中線，遊子身上衣。", "B. 臨行密密縫，意恐遲遲歸。", "C. 誰言寸草心，報得三春暉。"], ans: 2 },
+        { q: "陳阿姨的女兒要去外國讀書了，陳阿姨在機場不斷叮嚀女兒要注意保暖、按時吃飯。這份心情最符合哪一句詩？", opts: ["A. 臨行密密縫，意恐遲遲歸。", "B. 慈母手中線，遊子身上衣。", "C. 誰言寸草心，報得三春暉。"], ans: 0 }
     ];
     let cIdx = 0;
 
